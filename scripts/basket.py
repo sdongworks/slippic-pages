@@ -9,7 +9,8 @@ GitHub Actions(.github/workflows/basket.yml)가 매주 목요일 아침에 실�
 
 규칙 (대장부 설계, 2026-11-13)
 - 예측 금지: "올랐어요/내렸어요"만. 구매 권유 문구 금지.
-- 품목: 지난주 대비 ±10% 이상이고 한 달 전 대비 같은 방향 → 내린 것 1개(sunny), 오른 것 1개(cloudy).
+- 품목: 지난주 대비 ±10% 이상이고 한 달 전 대비 같은 방향 → 내린 것 1개(sunny), 오른 것 1개(cloudy),
+  기준을 넘은 전부는 items(최대 8, 앱 상단 티커).
   지난주 기록이 없으면(첫 실행) 한 달 전 대비 ±15% 이상으로 대신 판단.
 - 휘발유: 지난주 대비 1.5% 이상이면 후보.
 - 환율: 한 달 새 20원 이상 움직이면 한마디(tip).
@@ -183,7 +184,10 @@ def pick(items: list[dict], last_week: dict[str, float], fuel: dict | None):
 
     downs = sorted((c for c in cands if c[0] < 0), key=lambda c: c[0])
     ups = sorted((c for c in cands if c[0] > 0), key=lambda c: -c[0])
-    return ([as_json(downs[0])] if downs else [], [as_json(ups[0])] if ups else [])
+    # 상단 티커용: 기준을 넘은 전부, 변동 큰 순 최대 8개
+    allc = sorted(cands, key=lambda c: -abs(c[0]))[:8]
+    return ([as_json(downs[0])] if downs else [], [as_json(ups[0])] if ups else [],
+            [as_json(c) for c in allc])
 
 
 def main() -> int:
@@ -207,7 +211,7 @@ def main() -> int:
         print('모든 소스 실패 — basket.json 유지')
         return 0
 
-    sunny, cloudy = pick(items, last_week, fuel)
+    sunny, cloudy, all_items = pick(items, last_week, fuel)
     tip = None
     if usd is not None and abs(usd) >= 20:
         tip = ({'text': f'환율이 한 달 새 {abs(round(usd))}원 올랐어요. 해외직구는 잠깐 미뤄도 돼요.',
@@ -217,7 +221,7 @@ def main() -> int:
 
     out = {'schema': 1, 'base_date': today.isoformat(),
            'updated_at': dt.datetime.now(KST).isoformat(timespec='seconds'),
-           'sunny': sunny, 'cloudy': cloudy}
+           'sunny': sunny, 'cloudy': cloudy, 'items': all_items}
     if tip:
         out['tip'] = tip
 
