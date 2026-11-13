@@ -3,151 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>대장부 — 고객카드 사진 한 장이면 엑셀 끝</title>
-  <meta name="description" content="고객카드·전표를 사진으로 찍으면 자동으로 엑셀이 되어 이메일로 도착합니다. 손글씨 장부 쓰는 자영업자를 위한 앱, 대장부." />
-  <meta property="og:title" content="대장부 — 귀찮은 장부, 대신 써드립니다" />
-  <meta property="og:description" content="사진 한 장이면 엑셀 끝. 손글씨 장부 쓰는 자영업자를 위한 앱." />
+  <title>대장부 — 하루 예산 가계부 위젯</title>
+  <meta name="description" content="홈 화면에서 바로 보는 오늘 쓸 수 있는 돈. 가입 없이 3초 입력, 내 폰에만 저장하는 하루 예산 가계부 위젯, 대장부." />
+  <meta property="og:title" content="대장부 — 오늘 쓸 수 있는 돈, 홈 화면에서 바로" />
+  <meta property="og:description" content="가입 없이 3초 입력, 내 폰에만 저장. 하루 예산 가계부 위젯." />
+  <meta property="og:image" content="https://sdongworks.github.io/slippic-pages/icon.png" />
+  <link rel="icon" href="icon.png" />
   <style>
     :root {
-      --navy: #1f3a5f;
-      --navy-deep: #15293f;
-      --gold: #c9a24b;
-      --ink: #1a1a1a;
-      --muted: #667085;
-      --line: #e6e9ef;
-      --bg-soft: #f7f9fc;
+      --cream: #FFF8EE; --navy: #1E3A6E; --ink: #1B2340; --sub: #6E6B78;
+      --gold: #E5B43C; --mint: #1FB58F; --line: #EADFCB; --soft: #F6EEDF;
     }
     * { box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
-      margin: 0;
-      color: var(--ink);
-      line-height: 1.7;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+      margin: 0; color: var(--ink); background: var(--cream); line-height: 1.7;
       -webkit-font-smoothing: antialiased;
     }
-    .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
-
-    /* Hero */
-    .hero {
-      background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
-      color: #fff;
-      padding: 72px 0 64px;
-      text-align: center;
-    }
-    .brand {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 15px; letter-spacing: 1px; color: var(--gold);
-      font-weight: 700; margin-bottom: 20px;
-    }
-    .brand .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
-    .hero h1 { font-size: 30px; line-height: 1.4; margin: 0 0 16px; font-weight: 800; }
-    .hero p { font-size: 16px; color: #c7d2e0; margin: 0 auto; max-width: 460px; }
-    .cta {
-      display: inline-block; margin-top: 28px;
-      background: var(--gold); color: var(--navy-deep);
-      font-weight: 700; text-decoration: none;
-      padding: 13px 28px; border-radius: 10px; font-size: 15px;
-    }
-    .cta.secondary { background: transparent; color: #fff; border: 1px solid #44597a; margin-left: 8px; }
-
-    /* Sections */
-    section { padding: 56px 0; }
-    section h2 { font-size: 21px; font-weight: 800; margin: 0 0 28px; text-align: center; }
-
-    .features { display: grid; gap: 16px; }
-    @media (min-width: 640px) { .features { grid-template-columns: repeat(3, 1fr); } }
-    .card {
-      border: 1px solid var(--line); border-radius: 14px; padding: 24px 20px;
-      background: #fff;
-    }
-    .card .ico {
-      width: 44px; height: 44px; border-radius: 11px;
-      background: var(--bg-soft); color: var(--navy);
-      display: grid; place-items: center; font-size: 22px; margin-bottom: 14px;
-    }
-    .card h3 { font-size: 16px; margin: 0 0 6px; }
-    .card p { font-size: 14px; color: var(--muted); margin: 0; }
-
-    /* Steps */
-    .steps { background: var(--bg-soft); }
-    .step { display: flex; gap: 16px; align-items: flex-start; padding: 14px 0; }
-    .step .n {
-      flex: none; width: 30px; height: 30px; border-radius: 50%;
-      background: var(--navy); color: #fff; font-weight: 700; font-size: 14px;
-      display: grid; place-items: center;
-    }
-    .step h3 { font-size: 15px; margin: 2px 0 2px; }
-    .step p { font-size: 14px; color: var(--muted); margin: 0; }
-
-    /* Footer */
-    footer { border-top: 1px solid var(--line); padding: 32px 0 48px; font-size: 13px; color: var(--muted); }
-    footer a { color: var(--navy); text-decoration: none; }
-    footer .links { margin-bottom: 14px; }
-    footer .links a { margin-right: 18px; }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+    .hero { padding: 56px 0 40px; }
+    .hero .grid { display: grid; gap: 32px; align-items: center; }
+    @media (min-width: 720px) { .hero .grid { grid-template-columns: 1.1fr .9fr; } }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; color: var(--navy); }
+    .brand img { width: 40px; height: 40px; border-radius: 10px; }
+    h1 { font-size: 34px; line-height: 1.35; margin: 18px 0 12px; font-weight: 800; }
+    h1 em { font-style: normal; color: var(--navy); box-shadow: inset 0 -12px 0 rgba(229,180,60,.45); }
+    .lead { font-size: 17px; color: var(--sub); margin: 0; }
+    .cta { display: inline-block; margin-top: 24px; background: var(--navy); color: #fff; font-weight: 700;
+      text-decoration: none; padding: 14px 26px; border-radius: 14px; font-size: 16px; }
+    .shot { justify-self: center; width: min(300px, 80vw); border-radius: 28px; border: 1px solid var(--line);
+      box-shadow: 0 12px 32px rgba(27,35,64,.12); }
+    section { padding: 40px 0; }
+    h2 { font-size: 22px; font-weight: 800; margin: 0 0 20px; }
+    .features { display: grid; gap: 14px; }
+    @media (min-width: 640px) { .features { grid-template-columns: repeat(2, 1fr); } }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 20px; }
+    .card h3 { font-size: 16px; margin: 0 0 4px; }
+    .card p { font-size: 14px; color: var(--sub); margin: 0; }
+    .ico { font-size: 22px; }
+    .formula { background: var(--soft); border-radius: 20px; padding: 20px; font-size: 15px; }
+    .formula b { color: var(--navy); }
+    .premium { background: var(--navy); color: #fff; border-radius: 24px; padding: 24px; }
+    .premium h2 { color: #fff; }
+    .premium .tag { display: inline-block; background: var(--gold); color: var(--ink); font-weight: 800;
+      font-size: 12px; border-radius: 999px; padding: 2px 10px; margin-bottom: 8px; }
+    .premium li { color: #D6DCEC; }
+    .char { width: 120px; float: right; margin: -10px 0 0 12px; }
+    footer { border-top: 1px solid var(--line); padding: 28px 0 48px; font-size: 13px; color: var(--sub); }
+    footer a { color: var(--navy); text-decoration: none; margin-right: 16px; }
   </style>
 </head>
 <body>
 
-  <header class="hero">
-    <div class="wrap">
-      <div class="brand"><span class="dot"></span> 대장부 · SlipPic</div>
-      <h1>귀찮은 장부,<br />대장부가 대신 써드립니다.</h1>
-      <p>고객카드·전표를 사진으로 찍기만 하세요. 자동으로 엑셀이 되어 이메일로 도착합니다.</p>
-      <div>
-        <a class="cta" href="https://play.google.com/store/apps/details?id=com.sdongworks.slippic">Google Play에서 받기</a>
-      </div>
+<header class="hero">
+  <div class="wrap grid">
+    <div>
+      <div class="brand"><img src="icon.png" alt="" /> 대장부</div>
+      <h1>돈 쓰기 전에,<br /><em>홈 화면</em>을 한 번 보세요.</h1>
+      <p class="lead">이번 달 예산을 하루 단위로 나눠 <b>오늘 쓸 수 있는 돈</b> 하나만 알려 드려요.
+        가입 없이 3초 입력, 기록은 내 폰에만.</p>
+      <a class="cta" href="https://play.google.com/store/apps/details?id=com.sdongworks.slippic">Google Play에서 받기</a>
     </div>
-  </header>
+    <img class="shot" src="screen_home.png" alt="대장부 홈 화면: 오늘 쓸 수 있는 돈 ₩31,800" />
+  </div>
+</header>
 
-  <section class="wrap">
-    <h2>사진 한 장이면 끝</h2>
-    <div class="features">
-      <div class="card">
-        <div class="ico">📸</div>
-        <h3>찍기만 하면</h3>
-        <p>손글씨 고객카드를 카메라로 촬영하거나 갤러리에서 여러 장 한 번에 선택하세요.</p>
-      </div>
-      <div class="card">
-        <div class="ico">🤖</div>
-        <h3>자동 정리</h3>
-        <p>성명·전화번호·금액·제품을 알아서 인식하고 정확하게 정리해 줍니다.</p>
-      </div>
-      <div class="card">
-        <div class="ico">📊</div>
-        <h3>엑셀로 발송</h3>
-        <p>마감 한 번이면 깔끔한 엑셀 파일이 만들어져 메일로 바로 받아볼 수 있어요.</p>
-      </div>
-    </div>
-  </section>
+<section class="wrap">
+  <h2>숫자 하나로 끝나는 가계부</h2>
+  <div class="features">
+    <div class="card"><div class="ico">📱</div><h3>홈 화면 위젯</h3>
+      <p>앱을 열지 않아도 오늘 쓸 수 있는 돈이 떠 있어요. 위젯의 + 로 바로 적어요.</p></div>
+    <div class="card"><div class="ico">⚡</div><h3>3초 입력</h3>
+      <p>금액 → 카테고리 → 저장. 마지막에 쓴 카테고리는 미리 골라져 있어요.</p></div>
+    <div class="card"><div class="ico">📅</div><h3>그림으로 한눈에</h3>
+      <p>달력엔 지킨 날·넘긴 날, 무지출 날엔 금색 별 도장. 통계는 도넛 한 장.</p></div>
+    <div class="card"><div class="ico">🔒</div><h3>가입 없음, 내 폰에만</h3>
+      <p>회원가입·서버가 없어요. 인터넷 권한도 없어요. 백업은 파일로 직접.</p></div>
+  </div>
+</section>
 
-  <section class="steps">
-    <div class="wrap">
-      <h2>이렇게 동작해요</h2>
-      <div class="step">
-        <div class="n">1</div>
-        <div><h3>양식 등록</h3><p>쓰던 빈 양식을 한 번 촬영하면 대장부가 항목 구조를 학습합니다.</p></div>
-      </div>
-      <div class="step">
-        <div class="n">2</div>
-        <div><h3>고객카드 촬영</h3><p>하루 동안 받은 카드를 그때그때 찍어 모아둡니다.</p></div>
-      </div>
-      <div class="step">
-        <div class="n">3</div>
-        <div><h3>마감</h3><p>버튼 한 번이면 엑셀이 생성되어 지정한 이메일로 발송됩니다.</p></div>
-      </div>
-    </div>
-  </section>
+<section class="wrap">
+  <h2>계산은 이게 전부예요</h2>
+  <div class="formula">
+    <b>오늘 쓸 수 있는 돈</b> = (이번 달 예산 − 어제까지 쓴 돈) ÷ 남은 날 − 오늘 쓴 돈<br />
+    어제 아끼면 오늘이 늘고, 넘기면 남은 날에 조금씩 나눠져요. 월세·통신비 같은 고정비는 따로 관리해 숫자를 흔들지 않아요.
+  </div>
+</section>
 
-  <footer>
-    <div class="wrap">
-      <div class="links">
-        <a href="privacy-policy.html">개인정보 처리방침</a>
-        <a href="account-deletion.html">계정·데이터 삭제 요청</a>
-      </div>
-      <div>문의: <a href="mailto:sdongworks@gmail.com">sdongworks@gmail.com</a></div>
-      <div>© 2026 에스동웍스 (SdongWorks). All rights reserved.</div>
+<section class="wrap">
+  <div class="premium">
+    <img class="char" src="character.png" alt="장부 대장 캐릭터" />
+    <span class="tag">PREMIUM</span>
+    <h2>대장부 프리미엄 · 한 번 결제</h2>
+    <ul>
+      <li>위젯 꾸미기 — 밤하늘·소풍 스킨</li>
+      <li>기간별 지출 추이 차트</li>
+      <li>CSV 내보내기 (엑셀에서 바로)</li>
+    </ul>
+    <p style="color:#D6DCEC;margin:0">구독이 아니에요. 하루 예산·위젯·달력·통계·백업은 전부 무료예요.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div style="margin-bottom:10px">
+      <a href="privacy-policy.html">개인정보 처리방침</a>
+      <a href="account-deletion.html">데이터 삭제 안내</a>
+      <a href="mailto:sdongworks@gmail.com">문의</a>
     </div>
-  </footer>
+    <div>© 2026 에스동웍스 (SdongWorks)</div>
+  </div>
+</footer>
 
 </body>
 </html>
