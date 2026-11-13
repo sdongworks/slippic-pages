@@ -1,0 +1,38 @@
+# 장바구니 날씨 — 매주 목요일 07:00 KST에 basket.json 갱신 (대장부 앱이 읽음)
+name: basket
+
+on:
+  schedule:
+    - cron: '0 22 * * 3'   # 수 22:00 UTC = 목 07:00 KST
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: basket
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build basket.json
+        env:
+          KAMIS_KEY: ${{ secrets.KAMIS_KEY }}
+          KAMIS_ID: ${{ secrets.KAMIS_ID }}
+          OPINET_KEY: ${{ secrets.OPINET_KEY }}
+          ECOS_KEY: ${{ secrets.ECOS_KEY }}
+        run: python3 scripts/basket.py
+      - name: Commit
+        run: |
+          git config user.name "basket-bot"
+          git config user.email "basket-bot@users.noreply.github.com"
+          git add basket.json basket_history.json
+          git diff --cached --quiet || git commit -m "chore: 장바구니 날씨 $(date -u +%F)"
+          git push
