@@ -69,21 +69,34 @@ def kamis_items(today: dt.date) -> list[dict]:
         print('KAMIS: 키 없음 — 건너뜀')
         return []
     found: dict[str, dict] = {}
-    for cat in KAMIS_CATEGORIES:
+
+    def fetch(cat: str, day: dt.date) -> tuple[list[dict], str]:
         q = urllib.parse.urlencode({
             'action': 'dailyPriceByCategoryList', 'p_product_cls_code': '01',
-            'p_regday': today.isoformat(), 'p_convert_kg_yn': 'N',
+            'p_regday': day.isoformat(), 'p_convert_kg_yn': 'N',
             'p_item_category_code': cat, 'p_cert_key': key, 'p_cert_id': cid,
             'p_returntype': 'json',
         })
+        data = json.loads(get(f'https://www.kamis.or.kr/service/price/xml.do?{q}'))
+        body = data.get('data')
+        if not isinstance(body, dict):  # 자료 없음은 ["001"]처럼 목록으로 오기도 한다
+            return [], str(body)
+        rows = body.get('item') or []
+        return ([rows] if isinstance(rows, dict) else rows), str(body.get('error_code', ''))
+
+    for cat in KAMIS_CATEGORIES:
+        # 그날 자료가 아직 없으면(주말·갱신 전) 최근 날짜로 하루씩 물러난다 (최대 5일)
+        rows, code, day = [], '', today
         try:
-            data = json.loads(get(f'https://www.kamis.or.kr/service/price/xml.do?{q}'))
+            for back in range(6):
+                day = today - dt.timedelta(days=back)
+                rows, code = fetch(cat, day)
+                if any(num(r.get('dpr1')) for r in rows):  # 행은 와도 당일 가격이 전부 "-"면 다음 날짜로
+                    break
         except Exception as e:  # noqa: BLE001
             print(f'KAMIS {cat}: 실패 {e}')
             continue
-        rows = (data.get('data') or {}).get('item') or []
-        if isinstance(rows, dict):
-            rows = [rows]
+        print(f'KAMIS {cat}: {len(rows)}행 ({day}, 코드 {code})')
         for row in rows:
             name = f"{row.get('item_name', '')}"
             label = next((show for kw, show in WATCH if kw in name), None)
