@@ -111,6 +111,7 @@ def kamis_items(today: dt.date) -> list[dict]:
             found[label] = {
                 'name': label, 'unit': str(row.get('unit', '')).strip() or None,
                 'price': price, 'month_ago': month, 'source': 'KAMIS',
+                'date': day.isoformat(),  # 실제 가격 날짜 (base_date용, 앱에는 안 나감)
             }
     print(f'KAMIS: {len(found)}개 품목')
     return list(found.values())
@@ -239,7 +240,12 @@ def main() -> int:
                {'text': f'환율이 한 달 새 {abs(round(usd))}원 내렸어요. 해외직구 부담이 조금 줄었어요.',
                 'source': '한국은행'})
 
-    out = {'schema': 1, 'base_date': today.isoformat(),
+    # 기준일 = 카드에 나가는 품목의 실제 가격 날짜 중 가장 이른 날 (KAMIS는 갱신 전이면 며칠 전 자료)
+    shown = {it['name'] for it in sunny + cloudy + all_items}
+    dates = [it['date'] for it in items if it['name'] in shown and it.get('date')]
+    base = min(dates) if dates else today.isoformat()
+
+    out = {'schema': 1, 'base_date': base,
            'updated_at': dt.datetime.now(KST).isoformat(timespec='seconds'),
            'sunny': sunny, 'cloudy': cloudy, 'items': all_items}
     if tip:
