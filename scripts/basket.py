@@ -137,15 +137,22 @@ def ecos_usd_change(today: dt.date) -> float | None:
         start = end - dt.timedelta(days=6)
         url = (f'https://ecos.bok.or.kr/api/StatisticSearch/{key}/json/kr/1/10/731Y001/D/'
                f'{start:%Y%m%d}/{end:%Y%m%d}/0000001')
-        rows = json.loads(get(url)).get('StatisticSearch', {}).get('row', [])
+        data = json.loads(get(url))
+        if 'StatisticSearch' not in data:  # 키 오류·한도 초과 등은 RESULT로 온다 (예: INFO-100 인증키 무효)
+            r = data.get('RESULT', {})
+            print(f"ECOS: 응답 오류 {r.get('CODE', '?')} {r.get('MESSAGE', '')}")
+        rows = data.get('StatisticSearch', {}).get('row', [])
         return [v for v in (num(r['DATA_VALUE']) for r in rows) if v]
 
     try:
         now = window(today)
         then = window(today - dt.timedelta(days=30))
         if not now or not then:
+            print('ECOS: 값 없음 — 건너뜀')
             return None
-        return now[-1] - then[-1]
+        diff = now[-1] - then[-1]
+        print(f'ECOS: 원/달러 {now[-1]:,.1f}원 (한 달 전 {then[-1]:,.1f}원, {diff:+.1f}원)')
+        return diff
     except Exception as e:  # noqa: BLE001
         print(f'ECOS: 실패 {e}')
         return None
