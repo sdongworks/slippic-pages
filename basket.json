@@ -1,51 +1,8 @@
 {
  "schema": 1,
- "base_date": "2026-11-13",
- "updated_at": "2026-11-16T13:05:52+09:00",
- "sunny": [
-  {
-   "name": "무",
-   "change_pct": -26,
-   "compare": "한 달 전",
-   "price": 1647,
-   "unit": "1개",
-   "source": "KAMIS"
-  }
- ],
- "cloudy": [
-  {
-   "name": "오이",
-   "change_pct": 67,
-   "compare": "한 달 전",
-   "price": 14392,
-   "unit": "10개",
-   "source": "KAMIS"
-  }
- ],
- "items": [
-  {
-   "name": "오이",
-   "change_pct": 67,
-   "compare": "한 달 전",
-   "price": 14392,
-   "unit": "10개",
-   "source": "KAMIS"
-  },
-  {
-   "name": "무",
-   "change_pct": -26,
-   "compare": "한 달 전",
-   "price": 1647,
-   "unit": "1개",
-   "source": "KAMIS"
-  },
-  {
-   "name": "상추",
-   "change_pct": 18,
-   "compare": "한 달 전",
-   "price": 1226,
-   "unit": "100g",
-   "source": "KAMIS"
-  }
- ]
+ "base_date": "2026-11-19",
+ "updated_at": "2026-11-19T11:58:27+09:00",
+ "sunny": [],
+ "cloudy": [],
+ "items": []
 }
